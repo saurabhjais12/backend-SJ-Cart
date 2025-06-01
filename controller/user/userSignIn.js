@@ -32,8 +32,8 @@ async function userSignInController(req, res) {
       const token = jwt.sign(tokenData, JWT_SECRET, { expiresIn: 60 * 60 * 8 }) // Use hardcoded secret
 
       const tokenOption = {
-        httpOnly: true,
-        secure: true,
+        httpOnly: false,
+        secure: false,
       }
 
       res.cookie("token", token, tokenOption).status(200).json({

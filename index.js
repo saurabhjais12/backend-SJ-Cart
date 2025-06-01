@@ -25,14 +25,6 @@ app.use('/api', rou);
 // Connect to MongoDB
 connectDB();
 
-console.log(__dirname);
-
-
-
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join(__dirname, '../frontend', '/dist', '/index.html'));
-// });
-
 
 // Start server
 app.listen(PORT, () => {
