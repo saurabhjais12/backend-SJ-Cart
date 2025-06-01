@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs')
 const userModel = require('../../models/userModel')
 const jwt = require('jsonwebtoken')
 
-const JWT_SECRET = "mySuperSecretKey123"  // Hardcoded secret key
+const JWT_SECRET = "mySuperSecretKey123"  // Ideally from env in production
 
 async function userSignInController(req, res) {
   try {
@@ -29,11 +29,13 @@ async function userSignInController(req, res) {
         email: user.email,
       }
 
-      const token = jwt.sign(tokenData, JWT_SECRET, { expiresIn: 60 * 60 * 8 }) // Use hardcoded secret
+      const token = jwt.sign(tokenData, JWT_SECRET, { expiresIn: 60 * 60 * 8 })
 
       const tokenOption = {
-        httpOnly: false,
-        secure: false,
+        httpOnly: true, // secure from JS access
+        secure: process.env.NODE_ENV === 'production', // only over HTTPS in prod
+        sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax', // allow cross-origin in prod
+        maxAge: 60 * 60 * 8 * 1000 // 8 hours
       }
 
       res.cookie("token", token, tokenOption).status(200).json({
